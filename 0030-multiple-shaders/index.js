@@ -37,13 +37,11 @@
     for (var i=0; i<points.length; i++) {
       pointsArray.push(points[i].x);
       pointsArray.push(points[i].y);
-      colorsArray.push(points[i].c[0]);
       colorsArray.push(points[i].c[1]);
-      colorsArray.push(points[i].c[2]);
-      colorsArray.push(points[i].c[3]);
+      //colorsArray.push(points[i].c[2]); 
     }
     var arrays = [
-      {name:'aColor', array:colorsArray, size:4},
+      {name:'aColor', array:colorsArray, size:1},
       {name:'aPosition', array:pointsArray, size:2},
     ];
     var n = pointsArray.length/2;
@@ -55,10 +53,10 @@
     gl.drawArrays(gl.POINTS, 0, n);
     // gl.drawArrays(gl.LINES, 0, n);
     // gl.drawArrays(gl.LINE_STRIP, 0, n);
-    gl.drawArrays(gl.LINE_LOOP, 0, n);
-    // gl.drawArrays(gl.TRIANGLES, 0, n);
+    //gl.drawArrays(gl.LINE_LOOP, 0, n);
+    //gl.drawArrays(gl.TRIANGLES, 0, n);
     // gl.drawArrays(gl.TRIANGLE_FAN, 0, n);
-    // gl.drawArrays(gl.TRIANGLE_STRIP, 0, n);
+     gl.drawArrays(gl.TRIANGLE_STRIP, 0, n);
   }
 
   // Create and set the buffers
@@ -92,7 +90,7 @@
   // UI Events
   function onmousedown(event) {
     var point = uiUtils.pixelInputToGLCoord(event, canvas);
-    point.c = [Math.random(), Math.random(), Math.random(), 1.0];
+    point.c = [0, 1, 0, 1.0];
     points.push(point);
     draw();
   }

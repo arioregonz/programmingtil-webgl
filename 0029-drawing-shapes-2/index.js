@@ -37,21 +37,27 @@
       colorsArray.push(points[i].c[2]);
       colorsArray.push(points[i].c[3]);
     }
-    var arrays = [{name:'aColor', array:colorsArray, size:4},
+    var arrays = [{name:'aColor', array:colorsArray, size:1},
                   {name:'aPosition', array:pointsArray, size:2}];
     var n = pointsArray.length/2;
+    
 
     // Render the arrays
     renderBuffers(arrays);
 
     gl.clear(gl.COLOR_BUFFER_BIT);
     gl.drawArrays(gl.POINTS, 0, n);
+    
     // gl.drawArrays(gl.LINES, 0, n);
     //gl.drawArrays(gl.LINE_STRIP, 0, n);
     //gl.drawArrays(gl.LINE_LOOP, 0, n);
     gl.drawArrays(gl.TRIANGLES, 0, n);
     //gl.drawArrays(gl.TRIANGLE_FAN, 0, n);
-    //gl.drawArrays(gl.TRIANGLE_STRIP, 0, n);
+    
+    
+    //else if (points.lenght >= 3) {
+    //gl.drawArrays(gl.TRIANGLES_STRIP, 0, n);
+    //}
   }
 
   // Create and set the buffers
@@ -72,7 +78,7 @@
           var attr = gl.getAttribLocation(program, name);
           gl.enableVertexAttribArray(attr);
           gl.bindBuffer(gl.ARRAY_BUFFER, program[name]);
-          gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(arrays[j].array), gl.STATIC_DRAW);
+          gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(arrays[j].array), gl.DYNAMIC_DRAW);
           gl.vertexAttribPointer(attr, arrays[j].size, gl.FLOAT, false, 0, 0);
         }
       }
@@ -82,7 +88,7 @@
   // UI Events
   function onmousedown(event) {
     var point = uiUtils.pixelInputToGLCoord(event, canvas);
-    point.c = [Math.random(), Math.random(), Math.random(), 1.0];
+    point.c = [Math.random(),Math.random(),Math.random(), 1.0];
     points.push(point);
     draw();
   }

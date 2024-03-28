@@ -1,7 +1,7 @@
 (function(global) {
 
   var canvas, gl, shaders = [], points = [];
-  var mode = 0;   // current shader
+  var mode = 1   // current shader
 
   glUtils.SL.init({ callback:function() { main(); } });
 
@@ -30,18 +30,18 @@
   }
 
   // draw!
-  function draw() {
+  function draw(points) {
     var program = shaders[mode];
     gl.useProgram(program);
 
-    var pointsArray = [], colorsArray = [];
+    var pointsArray = [], colorsArray = [], triangleArray = [];
     for (var i=0; i<points.length; i++) {
       pointsArray.push(points[i].x);
       pointsArray.push(points[i].y);
-      colorsArray.push(points[i].c[0]);
-      colorsArray.push(points[i].c[1]);
-      colorsArray.push(points[i].c[2]);
-      colorsArray.push(points[i].c[3]);
+      colorsArray.push(triangleArray[i].c[0]);
+      colorsArray.push(triangleArray[i].c[1]);
+      colorsArray.push(triangleArray[i].c[2]);
+      colorsArray.push(triangleArray[i].c[3]);
     }
     var arrays = [
       {name:'aColor', array:colorsArray, size:4},
@@ -53,13 +53,17 @@
     renderBuffers(program, arrays);
 
     gl.clear(gl.COLOR_BUFFER_BIT);
-    gl.drawArrays(gl.POINTS, 0, n);
+    if (points.length < 3) {
+      gl.drawArrays(gl.POINTS, 0, n);
+    }
     // gl.drawArrays(gl.LINES, 0, n);
     // gl.drawArrays(gl.LINE_STRIP, 0, n);
     // gl.drawArrays(gl.LINE_LOOP, 0, n);
-    gl.drawArrays(gl.TRIANGLES, 0, n);
+    //gl.drawArrays(gl.TRIANGLES, 0, n);
     //gl.drawArrays(gl.TRIANGLE_FAN, 0, n);
-    //gl.drawArrays(gl.TRIANGLE_STRIP, 0, n);
+    else if (points.lenght >= 3) {
+      gl.drawArrays(gl.TRIANGLE_STRIP, 0, n);
+    }
   }
 
   // Create and set the buffers
@@ -93,7 +97,10 @@
   // UI Events
   function onmousedown(event) {
     var point = uiUtils.pixelInputToGLCoord(event, canvas);
-    point.c = [Math.random(), Math.random(), Math.random(), 1.0];
+    var r = Math.random(0,1)
+    var g = Math.random(0,1)
+    var b = Math.random(0,1)
+    point.c = [r, g, b, 1.0];
     points.push(point);
     draw();
   }
